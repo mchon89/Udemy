@@ -12,7 +12,7 @@ import csv
 if __name__ == "__main__":
 
 # ----------------------------------------------
-# loading json file  
+# loading json file using curl --user 
 # ----------------------------------------------
 
 	d = open('1234.json', 'r')
@@ -23,7 +23,7 @@ if __name__ == "__main__":
 # writing header and other attributes 
 # ----------------------------------------------
 
-	with open("udemy1.csv", 'a') as f:
+	with open("udemy2.csv", 'a') as f:
 
 		# header = f.write('id' + ',' + 'title' + ',' + 'url' + ',' + 'is_paid' + ',' +
 		# 	'price' + ',' + 'professor' + ',' + 'description' + ',' + 'num_subscribers' + "\n")
@@ -52,13 +52,21 @@ if __name__ == "__main__":
 			link = 'https://www.udemy.com/api-2.0/courses/' + str(iden) +'?fields[course]=description,num_subscribers'
 			response = requests.get(link).content.decode()
 			another_data = json.loads(response)
-			description = str(another_data['description'])
-			description = description.rstrip().replace(',', '')
-			description = description.rstrip().replace('\n', '')
+			
+			if another_data['description']:
+				string = str(another_data['description'])
+				description = string
+				description = description.rstrip().replace(',', '')
+				description = description.rstrip().replace('\n', '')
+				description = description.rstrip().replace('\r', '')
+			else: 
+				print("no description")
+				description = " "
+			
 			num_subscribers = str(another_data['num_subscribers'])
 
 # ----------------------------------------------
-# writing the rest of attributes in a csv file
+# writing the rest of the attributes in a csv file
 # ----------------------------------------------
 
 			f.write(iden + ',' + title + ',' + url + ',' + is_paid + ',' 
